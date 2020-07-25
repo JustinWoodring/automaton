@@ -1,0 +1,16 @@
+[package]
+name = "automaton"
+version = "0.1.0"
+authors = ["Booglejr <rooty@kwtechllc.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+serenity = "0.8.6"
+regex = "1.3.9"
+reqwest = "0.10.6"
+serde = {version = "1.0.114", features = ["derive"]}
+serde_yaml = "0.8.13"
+serde_json = "1.0.56"
+rand = "0.7.3"
