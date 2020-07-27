@@ -21,7 +21,7 @@ pub fn parse(input : &str) -> Option<GithubEvents>{
     }
 
     //Check Push
-    if let Some(event) = check_pull_request(input)
+    if let Some(event) = check_push(input)
     {
         return Some(event)
     }
