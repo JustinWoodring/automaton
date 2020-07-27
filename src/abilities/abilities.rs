@@ -21,6 +21,7 @@ impl AbilityHandler{
         this.add_ability(Box::new(super::delete::Capability));
         this.add_ability(Box::new(super::student::Capability));
         this.add_ability(Box::new(super::resource::Capability));
+        this.add_ability(Box::new(super::gifdrop::Capability));
         //Add most default Ability here.
         this.add_ability(Box::new(super::mention::Capability));
         //Return Ability Handler.

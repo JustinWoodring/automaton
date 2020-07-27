@@ -2,6 +2,7 @@ mod delete;
 mod mention;
 mod resource;
 mod student;
+mod gifdrop;
 mod abilities;
 
 pub use abilities::Ability;

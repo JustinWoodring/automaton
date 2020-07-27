@@ -8,6 +8,11 @@ pub enum GithubEvents {
 
 pub fn parse(input : &str) -> Option<GithubEvents>{
     
+    match json::parse(input){
+        Ok(_) => {}
+        Err(err) => {println!("\n\nError: {:?}", err)}
+    }
+
     //Check Fork
     if let Some(event) = check_fork(input)
     {
@@ -41,6 +46,7 @@ fn check_fork(input : &str) -> Option<GithubEvents>{
             //Check to make sure repo exists.
             if object["repository"].is_null()
             {
+
                 return None
             }
 
@@ -156,37 +162,38 @@ fn check_push(input : &str) -> Option<GithubEvents>{
         {
 
             //Check to make sure repo exists.
-            if !object["repository"].is_null()
+            if object["repository"].is_null()
             {
                 return None
             }
 
             //Check to make sure sender exists.
-            if !object["sender"].is_null()
+            if object["sender"].is_null()
             {
                 return None
             }
 
+
             //Check to make sure forced exists.
-            if !object["forced"].is_null()
+            if object["forced"].is_null()
             {
                 return None
             }
 
             //And that it is a bool.
-            if object["forced"].is_boolean()
+            if !object["forced"].is_boolean()
             {
                 return None
             }
 
             
             //Now check to see if the fields we are looking for exist.
-            if !object["repository"]["html_url"].is_null()
+            if object["repository"]["html_url"].is_null()
             {
                 return None
             }
 
-            if !object["sender"]["login"].is_null()
+            if object["sender"]["login"].is_null()
             {
                 return None
             }
