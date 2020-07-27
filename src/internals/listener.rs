@@ -1,4 +1,6 @@
 use crate::Config;
+use crate::pick_statement;
+use super::parser;
 
 use serenity::CacheAndHttp;
 use std::io::Read;
@@ -63,14 +65,50 @@ impl Listener {
 
                     if let Ok(_) = stream.read_to_string(&mut buffer)
                     {
-                        
-                        //TODO
-                        //Implement more advanced message parsing.
+                        let mut content = String::new();
 
+                        //Implement more advanced message parsing.
+                        if let Some(event) = parser::github::parse(&buffer) {
+                            match event {
+                                parser::github::GithubEvents::Fork(repo_url, sender) => {
+                                    let option1 = format!("@everyone! I bear dreadful news. {} has forked their repo. The forked repo was: {}", sender.as_str(), repo_url.as_str());
+                                    let option2 = format!("@everyone. Please impart to these dilettantes the art of git. {} has forked repo, {}", sender.as_str(), repo_url.as_str());
+                                    content = pick_statement(vec![
+                                        &option1,
+                                        &option2
+                                    ]);
+                                },
+                                parser::github::GithubEvents::Push(repo_url, sender, forced) => {
+                                    if forced {
+                                        let option1 = format!("@everyone. {}'s repo has been obliterated by a force push. If there is anything left you can find it here: {}", sender.as_str(), repo_url.as_str());
+                                        let option2 = format!("@everyone. {} probably requires assistance restoring their repo, {}, to which they have just forced push...", sender.as_str(), repo_url.as_str());
+                                        content = pick_statement(vec![
+                                            &option1,
+                                            &option2
+                                        ]);
+                                    } else {
+                                        let option1 = format!("This is seemingly unimportant, but {} has pushed to their repo, {}", sender.as_str(),  repo_url.as_str());
+                                        let option2 = format!("I have received notice that {} just pushed to their repo, {}", sender.as_str(), repo_url.as_str());
+                                        content = pick_statement(vec![
+                                            &option1,
+                                            &option2
+                                        ]);
+                                    }
+                                },
+                                parser::github::GithubEvents::PullRequest(repo_url, sender) => {
+                                    let option1 = format!("@everyone. A rather peculiar event just occurred. {} opened a pull request in their repo: {}", sender.as_str(), repo_url.as_str());
+                                    let option2 = format!("@everyone. Hmm. Curious. {} just opened a pull request. Perhaps we should investigate, {}", sender.as_str(), repo_url.as_str());
+                                    content = pick_statement(vec![
+                                        &option1,
+                                        &option2
+                                    ]);
+                                },
+                            }
+                        }
 
                         //Build message.
                         let map = json!({
-                            "content": buffer,
+                            "content": content,
                             "tts": false,
                         });
                         

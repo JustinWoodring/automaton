@@ -13,4 +13,5 @@ reqwest = "0.10.6"
 serde = {version = "1.0.114", features = ["derive"]}
 serde_yaml = "0.8.13"
 serde_json = "1.0.56"
+json = "0.12.4"
 rand = "0.7.3"
